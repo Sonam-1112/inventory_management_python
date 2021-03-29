@@ -1,0 +1,677 @@
+main_frame = Frame(master_frame ,relief= 'ridge' ,bd = 4 )
+main_frame.pack(side = "left",fill = "y")
+
+st = tk.Label( main_frame,text = "Starter" , bg = 'Lightblue' , fg = 'red',font = title_font  ,relief ='groove',pady = 5)
+st.pack(side = 'top' ,fill= 'x')
+
+#Create a canvas
+my_canvas = Canvas(main_frame )
+my_canvas.pack(side = "left" ,fill = "y",)
+
+#Add a Scrollbar
+my_scrollbar = ttk.Scrollbar(main_frame , orient = "vertical" , command = my_canvas.yview)
+my_scrollbar.pack( side = RIGHT ,fill = "y")
+
+#Configure the  Canvas
+my_canvas.configure(yscrollcommand = my_scrollbar.set)
+my_canvas.bind('<Configure>',lambda e: my_canvas.configure(scrollregion = my_canvas.bbox("all")))
+
+#Creating another frame inside the Canvas
+frame = tk.Frame(my_canvas )
+my_canvas.create_window((0,0),window = frame ,anchor = "n")
+my_canvas.pack(fill='both')
+
+
+
+
+
+
+def welcome_bill():
+        billarea.delete('1.0',END)
+        billarea.insert(END,"\t\tWelcome Dear Customer\n")
+        billarea.insert(END,f"\n\nBill Number    : {bill_no.get()}")
+        billarea.insert(END,f"\nCustomer Name  : {cnameval.get()}")
+        billarea.insert(END,f"\nCustomer Phone : {cphoneval.get()}")
+        billarea.insert(END,f"\n========================================================")
+        billarea.insert(END,f"\nProducts\t\t\tQTY\t\t\tPrice")
+        billarea.insert(END,f"\n========================================================")
+    
+        if(bathsoapval.get()!=0):
+            billarea.insert(END,f"\nBath Soap\t\t\t{bathsoapval.get()}\t\t\t{a_bs}")
+        if(facecreamval.get()!=0):
+            billarea.insert(END,f"\nFace Cream\t\t\t{facecreamval.get()}\t\t\t{a_fc}")
+        if(facewashval.get()!=0):
+            billarea.insert(END,f"\nFace Wash\t\t\t{facewashval.get()}\t\t\t{a_fw}")
+        if(hairsprayval.get()!=0):
+            billarea.insert(END,f"\nHair Spray\t\t\t{hairsprayval.get()}\t\t\t{a_hs}")
+        if(hairgelval.get()!=0):
+            billarea.insert(END,f"\nHair Gel\t\t\t{hairgelval.get()}\t\t\t{a_hg}")
+        if(bodylotionval.get()!=0):
+            billarea.insert(END,f"\nBody Lotion\t\t\t{bodylotionval.get()}\t\t\t{a_bl}")
+        
+        
+        if(riceval.get()!=0):
+            billarea.insert(END,f"\nRice\t\t\t{riceval.get()}\t\t\t{a_ri}")
+        if(foodoilval.get()!=0):
+            billarea.insert(END,f"\nFood Oil\t\t\t{foodoilval.get()}\t\t\t{a_fo}")
+        if(daalval.get()!=0):
+            billarea.insert(END,f"\nDaal\t\t\t{daalval.get()}\t\t\t{a_da}")
+        if(wheatval.get()!=0):
+            billarea.insert(END,f"\nWheat\t\t\t{wheatval.get()}\t\t\t{a_wh}")
+        if(sugarval.get()!=0):
+            billarea.insert(END,f"\nSugar\t\t\t{sugarval.get()}\t\t\t{a_su}")
+        if(teaval.get()!=0):
+            billarea.insert(END,f"\nTea\t\t\t{teaval.get()}\t\t\t{a_te}")
+        
+    
+        if(mazaval.get()!=0):
+            billarea.insert(END,f"\nMaza\t\t\t{mazaval.get()}\t\t\t{a_ma}")
+        if(cokeval.get()!=0):
+            billarea.insert(END,f"\nCoke\t\t\t{cokeval.get()}\t\t\t{a_co}")
+        if(frootival.get()!=0):
+            billarea.insert(END,f"\nFrooti\t\t\t{frootival.get()}\t\t\t{a_fr}")
+        if(thumbsupval.get()!=0):
+            billarea.insert(END,f"\nThumbs Up\t\t\t{thumbsupval.get()}\t\t\t{a_tu}")
+        if(limcaval.get()!=0):
+            billarea.insert(END,f"\nLimca\t\t\t{limcaval.get()}\t\t\t{a_li}")
+        if(spriteval.get()!=0):
+            billarea.insert(END,f"\nSprite\t\t\t{spriteval.get()}\t\t\t{a_sp}")
+        
+        billarea.insert(END,f"\n========================================================")
+        if(taxcosmeticval.get()!='Rs.0.0'):
+            billarea.insert(END,f"\nCosmetic Tax\t\t\t\t\t\t{taxcosmeticval.get()}")
+        if(taxgroceryval.get()!='Rs.0.0'):
+            billarea.insert(END,f"\nGrocery Tax\t\t\t\t\t\t{taxgroceryval.get()}")
+        if(taxcolddrinkval.get()!='Rs.0.0'):
+            billarea.insert(END,f"\nCold Drink Tax\t\t\t\t\t\t{taxcolddrinkval.get()}")
+        billarea.insert(END,f"\n========================================================")
+        billarea.insert(END,f"\nTotal Bill\t\t\t\t\t\t{'Rs.'+str(float(totcosmeticprice)+float(totgroceryprice)+float(totcolddrinkprice)+float(totcosmeticprice*0.05)+float(totgroceryprice*0.05)+float(totcolddrinkprice*0.05))}")
+
+    def savebill():
+        rr = messagebox.askyesnocancel("Save Bill","Do you want to save bill?",parent = root)
+        if(rr == True):
+            bill_data = billarea.get('1.0',END)
+            f1 = open("C:\\Users\\DELL\\Desktop\\Billing_recipts\\"+str(bill_no.get())+".txt","w")
+            f1.write(bill_data)
+            f1.close()
+            messagebox.showinfo('Notification',f'Bill No:{bill_no.get()} saved successfully',parent = root)
+        else:
+            return
+
+    def bill_calcy():
+        if(cnameval.get() == "" or cphoneval.get() == ""):
+            messagebox.showerror('Notification','Customer Details are required!!!',parent = root)
+        elif(totcosmeticprice==0 and totgroceryprice==0 and totcolddrinkprice==0):
+            messagebox.showerror('Notification','No Product has been selected!!!',parent = root)  
+        else:
+            welcome_bill()
+            savebill()
+        
+        
+    def totalfunc():
+        global a_bs,a_fc,a_fw,a_hs,a_hg,a_bl,a_ri,a_fo,a_da,a_wh,a_su,a_te,a_ma,a_co,a_fr,a_tu,a_li,a_sp,totcosmeticprice,totgroceryprice,totcolddrinkprice
+        #####################Cosmetics############
+        a_bs = bathsoapval.get()*40
+        a_fc = facecreamval.get()*120
+        a_fw = facewashval.get()*60
+        a_hs = hairsprayval.get()*180
+        a_hg = hairgelval.get()*140
+        a_bl = bodylotionval.get()*180
+        
+        totcosmeticprice = (a_bs+a_fc+a_fw+a_hs+a_hg+a_bl)
+        totcosmeticval.set('Rs.'+str(totcosmeticprice))
+        taxcosmeticval.set('Rs.'+str(totcosmeticprice*0.05))
+        
+        #####################Groceries############
+        a_ri = riceval.get()*80
+        a_fo = foodoilval.get()*180
+        a_da = daalval.get()*60
+        a_wh = wheatval.get()*240
+        a_su = sugarval.get()*45
+        a_te = teaval.get()*150
+        
+        totgroceryprice = (a_ri+a_fo+a_da+a_wh+a_su+a_te)
+        totgroceryval.set('Rs.'+str(totgroceryprice))
+        taxgroceryval.set('Rs.'+str(totgroceryprice*0.05))
+        
+        
+        #####################Cold Drinks############
+        a_ma = mazaval.get()*60
+        a_co = cokeval.get()*60
+        a_fr = frootival.get()*50
+        a_tu = thumbsupval.get()*45
+        a_li = limcaval.get()*40
+        a_sp = spriteval.get()*60
+        
+        totcolddrinkprice = (a_ma+a_co+a_fr+a_tu+a_li+a_sp)
+        totcolddrinkval.set('Rs.'+str(totcolddrinkprice))
+        taxcolddrinkval.set('Rs.'+str(totcolddrinkprice*0.05))
+
+    def genbillfunc():
+        bill_calcy()
+
+    def clearfunc():
+        cnameval.set('')
+        cphoneval.set('')
+        cbillval.set('')
+        bathsoapval.set(0)
+        facecreamval.set(0)
+        facewashval.set(0)
+        hairsprayval.set(0)
+        hairgelval.set(0)
+        bodylotionval.set(0)
+        riceval.set(0)
+        foodoilval.set(0)
+        daalval.set(0)
+        wheatval.set(0)
+        sugarval.set(0)
+        teaval.set(0)
+        mazaval.set(0)
+        cokeval.set(0)
+        frootival.set(0)
+        thumbsupval.set(0)
+        limcaval.set(0)
+        spriteval.set(0)
+        totcosmeticval.set('')
+        totgroceryval.set('')
+        totcolddrinkval.set('')
+        taxcosmeticval.set('')
+        taxgroceryval.set('')
+        taxcolddrinkval.set('')
+        
+    def exitfunc():
+        rr = messagebox.askyesnocancel("Notification","Are you sure you want to exit?",parent=root)
+        if(rr == True):
+            root.destroy()
+
+    def searchfunc():
+        present = "No"
+        for i in os.listdir("C:\\Users\\DELL\\Desktop\\Billing_recipts\\"):
+            if i.split('.')[0] == cbillval.get():
+                f1 = open("C:\\Users\\DELL\\Desktop\\Billing_recipts\\"+str(cbillval.get())+".txt","r")
+                billarea.delete('1.0',END)
+                for d in f1:
+                    billarea.insert(END,d)
+                f1.close()
+                present ="Yes"
+        if(present == "No"):
+            messagebox.showerror("Error","Bill No. Not Found!!!")
+        
+    #############################################################################Bill Area Frame
+    F5 = Frame(root,bd=15,relief=GROOVE)
+    F5.place(x=1010,y=170,width=500,height=380)
+
+    bill_title = Label(F5,text = 'Bill Area',font=('times',15,'italic'),bd=10,relief=GROOVE)
+    bill_title.pack(fill=X)
+
+    scroll_y = Scrollbar(F5,orient=VERTICAL)
+    billarea = Text(F5,yscrollcommand = scroll_y.set)
+    scroll_y.pack(side=RIGHT,fill=Y)
+    scroll_y.configure(command = billarea.yview)
+    billarea.pack(fill=BOTH,expand=1)
+    # billarea.configure(state='disabled')
+
+    cnameval = StringVar()
+    cphoneval = StringVar()
+    cbillval = StringVar()
+    bill_no = StringVar()
+    x = random.randint(1000,9999)
+    bill_no.set(str(x))
+
+    bathsoapval = IntVar()
+    facecreamval = IntVar()
+    facewashval = IntVar()
+    hairsprayval = IntVar()
+    hairgelval = IntVar()
+    bodylotionval = IntVar()
+
+    riceval = IntVar()
+    foodoilval = IntVar()
+    daalval = IntVar()
+    wheatval = IntVar()
+    sugarval = IntVar()
+    teaval = IntVar()
+
+    mazaval = IntVar()
+    cokeval = IntVar()
+    frootival = IntVar()
+    thumbsupval = IntVar()
+    limcaval = IntVar()
+    spriteval = IntVar()
+
+    totcosmeticval = StringVar()
+    totgroceryval = StringVar()
+    totcolddrinkval = StringVar()
+    taxcosmeticval = StringVar()
+    taxgroceryval = StringVar()
+    taxcolddrinkval = StringVar()
+
+    ########################################################################Labels
+    titleLabel = Label(root,text='Billing Software',bd=12,relief=GROOVE,fg='white',font=('Arial',20,'italic bold'),bg=bg_color)
+    titleLabel.place(x=0,y=0,relwidth=1)
+
+    ######################################################################Customer Detail Frame
+
+    F1 = LabelFrame(root,text='Customer Details',font=('times',15,'bold'),fg='gold2',bg=bg_color,bd=12,relief=GROOVE)
+    F1.place(x=0,y=59,relwidth=1)
+
+    cnameLabel = Label(F1,text='Customer Name',bg=bg_color,fg='white',font=('times',18,'bold'),padx=40,pady=5)
+    cnameLabel.grid(row=0,column=0)
+    cnameEntry = Entry(F1,width=20,bd=5,font=('times',15,'italic'),textvariable=cnameval)
+    cnameEntry.grid(row=0,column=1,padx=10,pady=5)
+
+
+    cphoneLabel = Label(F1,text='Phone No.',bg=bg_color,fg='white',font=('times',18,'bold'),padx=40,pady=5)
+    cphoneLabel.grid(row=0,column=2)
+    cphoneEntry = Entry(F1,width=20,bd=5,font=('times',15,'italic'),textvariable=cphoneval)
+    cphoneEntry.grid(row=0,column=3,padx=10,pady=5)
+
+
+    cbillLabel = Label(F1,text='Bill No.',bg=bg_color,fg='white',font=('times',18,'bold'),padx=40,pady=5)
+    cbillLabel.grid(row=0,column=4)
+    cbillEntry = Entry(F1,width=20,bd=5,font=('times',15,'italic'),textvariable=cbillval)
+    cbillEntry.grid(row=0,column=5,padx=10,pady=5)
+
+    searchbtn = Button(F1,text='Search',bg='cadetblue',font=('times',15,'bold'),bd=12,width=10,command=searchfunc)
+    searchbtn.grid(row=0,column=8,padx=10)
+
+
+    #####################################################################Cosmetics Detail Frame
+        
+
+    F2 = LabelFrame(root,text='Cosmetics',font=('times',15,'bold'),fg='gold2',bg=bg_color,bd=15,relief=GROOVE)
+    F2.place(x=5,y=170,width=325,height=380)
+
+    bathLabel = Label(F2,text='Bath Soap',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    bathLabel.grid(row=0,column=0,sticky='w',padx=10,pady=10)
+    bathEntry = Entry(F2,width=10,textvariable=bathsoapval,bd=5,font=('times',15,'italic'))
+    bathEntry.grid(row=0,column=1,padx=10,pady=10)
+
+    facecreamLabel = Label(F2,text='Face Cream',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    facecreamLabel.grid(row=1,column=0,sticky='w',padx=10,pady=10)
+    facecreamEntry = Entry(F2,width=10,textvariable=facecreamval,bd=5,font=('times',15,'italic'))
+    facecreamEntry.grid(row=1,column=1,padx=10,pady=10)
+
+    facewashLabel = Label(F2,text='Face Wash',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    facewashLabel.grid(row=2,column=0,sticky='w',padx=10,pady=10)
+    facewashEntry = Entry(F2,width=10,textvariable=facewashval,bd=5,font=('times',15,'italic'))
+    facewashEntry.grid(row=2,column=1,padx=10,pady=10)
+
+    hairsprayLabel = Label(F2,text='Hair Spray',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    hairsprayLabel.grid(row=3,column=0,sticky='w',padx=10,pady=10)
+    hairsprayEntry = Entry(F2,width=10,textvariable=hairsprayval,bd=5,font=('times',15,'italic'))
+    hairsprayEntry.grid(row=3,column=1,padx=10,pady=10)
+
+    hairgelLabel = Label(F2,text='Hair Gel',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    hairgelLabel.grid(row=4,column=0,sticky='w',padx=10,pady=10)
+    hairgelEntry = Entry(F2,width=10,textvariable=hairgelval,bd=5,font=('times',15,'italic'))
+    hairgelEntry.grid(row=4,column=1,padx=10,pady=10)
+
+    bodylotionLabel = Label(F2,text='Body lotion',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    bodylotionLabel.grid(row=5,column=0,sticky='w',padx=10,pady=10)
+    bodylotionEntry = Entry(F2,width=10,textvariable=bodylotionval,bd=5,font=('times',15,'italic'))
+    bodylotionEntry.grid(row=5,column=1,padx=10,pady=10)
+
+
+    #####################################################################Grocery Detail Frame
+
+    F3 = LabelFrame(root,text='Groceries',font=('times',15,'bold'),fg='gold2',bg=bg_color,bd=15,relief=GROOVE)
+    F3.place(x=340,y=170,width=325,height=380)
+
+    riceLabel = Label(F3,text='Rice',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    riceLabel.grid(row=0,column=0,sticky='w',padx=10,pady=10)
+    riceEntry = Entry(F3,width=10,textvariable=riceval,bd=5,font=('times',15,'italic'))
+    riceEntry.grid(row=0,column=1,padx=10,pady=10)
+
+    foodoilLabel = Label(F3,text='Food oil',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    foodoilLabel.grid(row=1,column=0,sticky='w',padx=10,pady=10)
+    foodoilEntry = Entry(F3,width=10,textvariable=foodoilval,bd=5,font=('times',15,'italic'))
+    foodoilEntry.grid(row=1,column=1,padx=10,pady=10)
+
+    daalLabel = Label(F3,text='Daal',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    daalLabel.grid(row=2,column=0,sticky='w',padx=10,pady=10)
+    daalEntry = Entry(F3,width=10,textvariable=daalval,bd=5,font=('times',15,'italic'))
+    daalEntry.grid(row=2,column=1,padx=10,pady=10)
+
+    wheatLabel = Label(F3,text='Wheat',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    wheatLabel.grid(row=3,column=0,sticky='w',padx=10,pady=10)
+    wheatEntry = Entry(F3,width=10,textvariable=wheatval,bd=5,font=('times',15,'italic'))
+    wheatEntry.grid(row=3,column=1,padx=10,pady=10)
+
+    sugarLabel = Label(F3,text='Sugar',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    sugarLabel.grid(row=4,column=0,sticky='w',padx=10,pady=10)
+    sugarEntry = Entry(F3,width=10,textvariable=sugarval,bd=5,font=('times',15,'italic'))
+    sugarEntry.grid(row=4,column=1,padx=10,pady=10)
+
+    teaLabel = Label(F3,text='Tea',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    teaLabel.grid(row=5,column=0,sticky='w',padx=10,pady=10)
+    teaEntry = Entry(F3,width=10,textvariable=teaval,bd=5,font=('times',15,'italic'))
+    teaEntry.grid(row=5,column=1,padx=10,pady=10)
+
+
+    #####################################################################Cold Drink Detail Frame
+
+    F4 = LabelFrame(root,text='Cold Drinks',font=('times',15,'bold'),fg='gold2',bg=bg_color,bd=15,relief=GROOVE)
+    F4.place(x=670,y=170,width=325,height=380)
+
+    mazaLabel = Label(F4,text='Maza',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    mazaLabel.grid(row=0,column=0,sticky='w',padx=10,pady=10)
+    mazaEntry = Entry(F4,width=10,textvariable=mazaval,bd=5,font=('times',15,'italic'))
+    mazaEntry.grid(row=0,column=1,padx=10,pady=10)
+
+    cokeLabel = Label(F4,text='Coke',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    cokeLabel.grid(row=1,column=0,sticky='w',padx=10,pady=10)
+    cokeEntry = Entry(F4,width=10,textvariable=cokeval,bd=5,font=('times',15,'italic'))
+    cokeEntry.grid(row=1,column=1,padx=10,pady=10)
+
+    frootiLabel = Label(F4,text='Frooti',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    frootiLabel.grid(row=2,column=0,sticky='w',padx=10,pady=10)
+    frootiEntry = Entry(F4,width=10,textvariable=frootival,bd=5,font=('times',15,'italic'))
+    frootiEntry.grid(row=2,column=1,padx=10,pady=10)
+
+    thumbsupLabel = Label(F4,text='Thumbs up',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    thumbsupLabel.grid(row=3,column=0,sticky='w',padx=10,pady=10)
+    thumbsupEntry = Entry(F4,width=10,textvariable=thumbsupval,bd=5,font=('times',15,'italic'))
+    thumbsupEntry.grid(row=3,column=1,padx=10,pady=10)
+
+    limcaLabel = Label(F4,text='Limca',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    limcaLabel.grid(row=4,column=0,sticky='w',padx=10,pady=10)
+    limcaEntry = Entry(F4,width=10,textvariable=limcaval,bd=5,font=('times',15,'italic'))
+    limcaEntry.grid(row=4,column=1,padx=10,pady=10)
+
+    spriteLabel = Label(F4,text='Sprite',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    spriteLabel.grid(row=5,column=0,sticky='w',padx=10,pady=10)
+    spriteEntry = Entry(F4,width=10,textvariable=spriteval,bd=5,font=('times',15,'italic'))
+    spriteEntry.grid(row=5,column=1,padx=10,pady=10)
+
+    ##############################################################################Billing Menu Frame
+        
+
+    F6 = LabelFrame(root,text='Bill Menu',font=('times',15,'bold'),fg='gold2',bg=bg_color,bd=15,relief=GROOVE)
+    F6.place(x=0,y=560,relwidth=1,height=220)
+
+    cosmeticpriceLabel = Label(F6,text='Total Cosmetic Price',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    cosmeticpriceLabel.grid(row=0,column=0,sticky='w',padx=10,pady=10)
+    cosmeticpriceEntry = Entry(F6,width=10,textvariable=totcosmeticval,bd=5,font=('times',15,'italic'))
+    cosmeticpriceEntry.grid(row=0,column=1,padx=10,pady=10)
+
+    grocerypriceLabel = Label(F6,text='Total Grocery Price',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    grocerypriceLabel.grid(row=1,column=0,sticky='w',padx=10,pady=10)
+    grocerypriceEntry = Entry(F6,width=10,textvariable=totgroceryval,bd=5,font=('times',15,'italic'))
+    grocerypriceEntry.grid(row=1,column=1,padx=10,pady=10)
+
+    colddrinkpriceLabel = Label(F6,text='Total Cold Drink Price',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    colddrinkpriceLabel.grid(row=2,column=0,sticky='w',padx=10,pady=10)
+    colddrinkpriceEntry = Entry(F6,width=10,textvariable=totcolddrinkval,bd=5,font=('times',15,'italic'))
+    colddrinkpriceEntry.grid(row=2,column=1,padx=10,pady=10)
+
+    cosmetictaxLabel = Label(F6,text='Cosmetic Tax',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    cosmetictaxLabel.grid(row=0,column=2,sticky='w',padx=10,pady=10)
+    cosmetictaxEntry = Entry(F6,width=10,bd=5,textvariable=taxcosmeticval,font=('times',15,'italic'))
+    cosmetictaxEntry.grid(row=0,column=3,padx=10,pady=10)
+
+    grocerytaxLabel = Label(F6,text='Grocery Tax',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    grocerytaxLabel.grid(row=1,column=2,sticky='w',padx=10,pady=10)
+    grocerytaxEntry = Entry(F6,width=10,bd=5,textvariable=taxgroceryval,font=('times',15,'italic'))
+    grocerytaxEntry.grid(row=1,column=3,padx=10,pady=10)
+
+    colddrinktaxLabel = Label(F6,text='Cold Drink Tax',bg=bg_color,fg='light green',font=('times',18,'bold'))
+    colddrinktaxLabel.grid(row=2,column=2,sticky='w',padx=10,pady=10)
+    colddrinktaxEntry = Entry(F6,width=10,textvariable=taxcolddrinkval,bd=5,font=('times',15,'italic'))
+    colddrinktaxEntry.grid(row=2,column=3,padx=10,pady=10)
+
+    ###############################################################################Buttons Frame
+
+    F7 = Frame(F6,bd=15,relief=GROOVE)
+    F7.place(x=750,y=27,width=720,height=105)
+
+    totalbtn = Button(F7,text="Total",bd=12,font=('times',15,'italic bold'),bg='cadetblue',width=10,command=totalfunc)
+    totalbtn.grid(row=0,column=0,padx=14,pady=8)
+
+    genbillbtn = Button(F7,text="Generate Bill",bd=12,font=('times',15,'italic bold'),bg='cadetblue',width=10,command=genbillfunc)
+    genbillbtn.grid(row=0,column=1,padx=14,pady=8)
+
+    clearbtn = Button(F7,text="Clear",bd=12,font=('times',15,'italic bold'),bg='cadetblue',width=10,command=clearfunc)
+    clearbtn.grid(row=0,column=2,padx=14,pady=8)
+
+    exitbtn = Button(F7,text="Exit",bd=12,font=('times',15,'italic bold'),bg='cadetblue',width=10,command=exitfunc)
+    exitbtn.grid(row=0,column=3,padx=14,pady=8)'
+
+
+
+
+    
+for i in range(50):
+    for j in range(6):
+        if i == 0:
+            label = Label(productstableFrame,text="Heading: "+str(j) , bg="white",fg="black",padx=1,pady=1)
+            label.config(font=("Arial",14))
+            label.grid(row=i,column=j,padx=1,pady=1)
+        else:
+            label = Label(productstableFrame,text="Heading: "+str(j) , bg="black",fg="white",padx=1,pady=1)
+            label.config(font=("Arial",14))
+            label.grid(row=i,column=j,padx=1,pady=1)
+
+
+wrapper1 = LabelFrame(productstableFrame)
+wrapper2 = LabelFrame(productstableFrame)
+
+mycanvas =  Canvas(wrapper1)
+mycanvas.pack(side =LEFT)
+
+yscrollbar = ttk.Scrollbar(wrapper1,orient="vertical",command=mycanvas.yview)
+yscrollbar.pack(side=RIGHT,fill="y")
+
+wrapper1.pack(fill="both",expand="yes",padx=10,pady=10)
+wrapper2.pack(fill="both",expand="yes",padx=10,pady=10)
+
+
+
+
+
+
+
+def showUserInfo():
+        showUserInforoot = Toplevel()
+        showUserInforoot.geometry('1220x700+200+50')
+        showUserInforoot.grab_set()                                        ######Untill this window is closed nothing will work
+        showUserInforoot.resizable(False,False)
+        showUserInforoot.title("User Information")
+        showUserInforoot.configure(bg = 'powder blue')
+        
+        def on_entersavenewbtn(e):    
+            savenewbtn.configure(bg='red')
+        def on_leavesavenewbtn(e):
+            savenewbtn.configure(bg='blue')
+            
+        def on_entersavechangesbtn(e):    
+            savechangesbtn.configure(bg='red')
+        def on_leavesavechangesbtn(e):
+            savechangesbtn.configure(bg='blue')
+        
+        ##################################################SubFrame-1
+        frame1 = Frame(showUserInforoot,bg = 'powder blue',relief=GROOVE,borderwidth=5,width=400,height=670)
+        frame1.place(x=10,y=20)
+        heading1 = Label(frame1,text='Address & Financial  ',width=21,font=('arial',22,'italic bold'),bg='powder blue')
+        heading1.place(x=0,y=0)
+        #################################################SubFrame-1 Labels
+        titleLabel = Label(frame1,text="Title : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        titleLabel.place(x=10,y=60)
+
+        nameLabel = Label(frame1,text="Name : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        nameLabel.place(x=10,y=120)
+        
+        emailLabel = Label(frame1,text="Email : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        emailLabel.place(x=10,y=180)
+
+        addressLabel = Label(frame1,text="Address : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        addressLabel.place(x=10,y=240)
+
+        countryLabel = Label(frame1,text="Country : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        countryLabel.place(x=10,y=300)
+
+        phoneLabel = Label(frame1,text="Phone No. : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        phoneLabel.place(x=10,y=360)
+
+        accountLabel = Label(frame1,text="Bank Acc. No.: ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        accountLabel.place(x=10,y=420)
+        
+        #################################################SubFrame-1 Entry Boxes
+        titleval = StringVar()
+        nameval = StringVar()
+        emailval = StringVar()
+        addressval = StringVar()
+        countryval = StringVar()
+        phoneval = StringVar()
+        accountval = StringVar()
+
+        titlechoosen = ttk.Combobox(frame1, width = 27, textvariable = titleval) 
+        titlechoosen['values'] = ('Mr.','Mrs.','Miss.','Other')
+        titlechoosen.place(x=150,y=60)
+
+        nameEntry = Entry(frame1,textvariable=nameval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        nameEntry.place(x=150,y=120)
+
+        emailEntry = Entry(frame1,textvariable=emailval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        emailEntry.place(x=150,y=180)
+
+        addressEntry = Entry(frame1,textvariable=addressval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        addressEntry.place(x=150,y=240)
+
+        countryEntry = Entry(frame1,textvariable=countryval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        countryEntry.place(x=150,y=300)
+
+        phoneEntry = Entry(frame1,textvariable=phoneval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        phoneEntry.place(x=150,y=360)
+
+        accountEntry = Entry(frame1,textvariable=accountval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        accountEntry.place(x=150,y=420)
+
+        ##################################################SubFrame-2
+        frame2 = Frame(showUserInforoot,bg = 'powder blue',relief=GROOVE,borderwidth=5,width=400,height=670)
+        frame2.place(x=410,y=20)
+        heading2 = Label(frame2,text='Other Information',width=21,font=('arial',22,'italic bold'),bg='powder blue')
+        heading2.place(x=0,y=0)
+        #################################################SubFrame-2 Labels
+        dobLabel = Label(frame2,text="DOB : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        dobLabel.place(x=10,y=60)
+
+        placeofbirthLabel = Label(frame2,text="Place of Birth : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        placeofbirthLabel.place(x=10,y=120)
+        
+        nationalityLabel = Label(frame2,text="Nationality : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        nationalityLabel.place(x=10,y=180)
+
+        maritalstatusLabel = Label(frame2,text="Marital Status : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        maritalstatusLabel.place(x=10,y=240)
+        
+        #################################################SubFrame-2 Entry Boxes
+        dobval = StringVar()
+        placeofbirthval = StringVar()
+        nationalityval = StringVar()
+        maritalstatusval = StringVar()
+
+        dobEntry = Entry(frame2,textvariable=dobval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        dobEntry.place(x=150,y=60)
+
+        placeofbirthEntry = Entry(frame2,textvariable=placeofbirthval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        placeofbirthEntry.place(x=150,y=120)
+
+        nationalityEntry = Entry(frame2,textvariable=nationalityval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        nationalityEntry.place(x=150,y=180)
+
+        maritalstatuschoosen = ttk.Combobox(frame2, width = 27, textvariable = maritalstatusval) 
+        maritalstatuschoosen['values'] = ('Married','Unmarried','Seperated')
+        maritalstatuschoosen.place(x=150,y=240)
+        
+        ##################################################SubFrame-3
+        frame3 = Frame(showUserInforoot,bg = 'powder blue',relief=GROOVE,borderwidth=5,width=400,height=670)
+        frame3.place(x=810,y=20)
+        heading3 = Label(frame3,text='Sensitive Information',width=21,font=('arial',22,'italic bold'),bg='powder blue')
+        heading3.place(x=0,y=0)
+        #################################################SubFrame-3 Labels
+        aadharLabel = Label(frame3,text="Aadhar No. : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        aadharLabel.place(x=10,y=60)
+
+        ssnLabel = Label(frame3,text="SSN No. : ",bg = 'powder blue',font = ('times',16,'italic'),anchor='w')
+        ssnLabel.place(x=10,y=120)
+        
+        #################################################SubFrame-3 Entry Boxes
+        aadharval = StringVar()
+        ssnval = StringVar()
+        
+        aadharEntry = Entry(frame3,textvariable=aadharval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        aadharEntry.place(x=150,y=60)
+
+        ssnEntry = Entry(frame3,textvariable=ssnval,width=25,font=('arial',12,'italic'),bd=5,bg='light pink')
+        ssnEntry.place(x=150,y=120)
+        
+        def savenewfunc():
+            pass
+            # if(titleval=="" or nameval=="" or emailval=="" or addressval=="" or countryval=="" or phoneval=="" or accountval=="" or dobval==""or placeofbirthval=="" or nationalityval=="" or maritalstatusval=="" or aadharval=="" or ssnval==""):
+            #     messagebox.showinfo('Notification','All Fields are required...!!!',parent=showUserInforoot)
+            # elif(phoneval.length()>10 or phoneval.length()<10 ):
+			# 	JOptionPane.showMessageDialog(null, "Mobile No. Should contain 10 Digits...")
+			
+			# elif(ID_text.getText().length()>9 or ID_text.getText().length()<9):
+			# 	JOptionPane.showMessageDialog(null, "Office ID No. Should contain 9 Digits...")
+		
+			# elif(personal_ID_text.getText().length()>12 or personal_ID_text.getText().length()<12):
+            #     JOptionPane.showMessageDialog(null, "Aadhar No. Should contain 12 Digits...")
+				
+			# elif(SSN_text.getText().length()>9 or SSN_text.getText().length()<9):
+		    # 	JOptionPane.showMessageDialog(null, "SSN Should contain 9 Digits...")
+
+			# else:
+			# 	String value1 = LogIn_Form.userText.getText()
+			# 	String value2 = title_combo.getSelectedItem().toString()
+			# 	String value3 = name_text.getText()
+			# 	String value4 = email_text.getText()
+			# 	String value5 = address_text.getText()
+			# 	String value6 = country_text.getText()
+			# 	String value7 = phone_text.getText()
+			# 	String value8 = ID_text.getText()
+			# 	String value9 = bank_text.getText()
+			# 	String value10 = dob_text.getText()
+			# 	String value11 = palce_birth_text.getText()
+			# 	String value12 = nationality_text.getText()
+			# 	String value13 = marital_combo.getSelectedItem().toString()
+			# 	String value14 = personal_ID_text.getText()
+			# 	String value15 = SSN_text.getText()
+			# 	try {
+			# 	String query = "insert into personal_deatils values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+			# 	PreparedStatement ps = con.prepareStatement(query)
+			# 	ps.setString(1, value1)
+			# 	ps.setString(2, value2)
+			# 	ps.setString(3, value3)
+			# 	ps.setString(4, value4)
+			# 	ps.setString(5, value5)
+			# 	ps.setString(6, value6)
+			# 	ps.setString(7, value7)
+			# 	ps.setString(8, value8)
+            
+			# 	ps.setString(9, value9)
+			# 	ps.setString(10, value10)
+			# 	ps.setString(11, value11)
+			# 	ps.setString(12, value12)
+			# 	ps.setString(13, value13)
+			# 	ps.setString(14, value14)
+			# 	ps.setString(15, value15)
+			# 	int rs = ps.executeUpdate()
+			# 	if(rs>0):
+			# 		JOptionPane.showMessageDialog(null, "Details Stored Successfully...")
+        
+        def savechangesfunc():
+            pass
+        ################################################SubFrame-3 Buttons
+        savenewbtn = Button(frame3,text='Save New',font=('Arial',15,'bold'),width=10,bg='blue',activebackground='red'
+                            ,activeforeground='white',relief=GROOVE,bd=9,command = savenewfunc)
+        savenewbtn.place(x=30,y=250)
+        savenewbtn.bind('<Enter>',on_entersavenewbtn)
+        savenewbtn.bind('<Leave>',on_leavesavenewbtn)
+        
+        savechangesbtn = Button(frame3,text='Save Changes',font=('Arial',15,'bold'),width=13,bg='blue',activebackground='red'
+                            ,activeforeground='white',relief=GROOVE,bd=9,command = savechangesfunc)
+        savechangesbtn.place(x=200,y=250)
+        savechangesbtn.bind('<Enter>',on_entersavechangesbtn)
+        savechangesbtn.bind('<Leave>',on_leavesavechangesbtn)

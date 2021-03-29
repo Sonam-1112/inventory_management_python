@@ -11,9 +11,9 @@ import import_ipynb
 
 root = Tk()
 root.title('Login Page')
-root.geometry('650x650+450+100')
+root.geometry('600x400+470+170')
 root.resizable(False,False)
-root.configure(bg="gold")
+root.configure(bg="powder blue")
 
 # ############################################################Images
 # bgimg = ImageTk.PhotoImage(file='bgimg.jpg')
@@ -39,9 +39,9 @@ def on_leaveregisterbtn(e):
     registerbtn.configure(bg='blue')
 
 def loginBtnfunc():
-    user = username.get()
-    passw = password.get()
-    if(user =="" or passw == ""):
+    username = usernameval.get()
+    passw = passwordval.get()
+    if(username =="" or passw == ""):
         messagebox.showinfo("Notification","All fields are required...!!!",parent=root)
     else:
         try:
@@ -50,16 +50,18 @@ def loginBtnfunc():
             query = 'use inventoryDB;'
             mycursor.execute(query)
             query = 'select * from login_info where username = %s and password=%s;'
-            t = mycursor.execute(query,(user,passw))
+            t = mycursor.execute(query,(username,passw))
             if(t == True):
                 data = mycursor.fetchall()
                 for i in data:
                     if(i[3] == 'Manufacturer'):
                         print("True")
                         root.destroy()
-                        Manufacturer_View.root.mainloop()
+                        Manufacturer_View.mains(user)
                     else:
                         print("Buyer Login")
+                        root.destroy()
+                        Buyer_View.mains(user)
             else:
                 messagebox.showerror('Notification','Incorrect Username or Password!!!\nPlease try again...')
         except:
@@ -67,22 +69,27 @@ def loginBtnfunc():
             return 
 def registerBtnfunc():
     registerroot = Toplevel()
-    registerroot.geometry("650x650+450+100")
+    registerroot.geometry("600x600+470+100")
     registerroot.resizable(False,False)
-    registerroot.configure(bg="gold2")
-    registerroot.title("Library Management System")
+    registerroot.configure(bg="powder blue")
+    registerroot.title("Register Page")
     registerroot.grab_set()
     def on_enterregisterbtn(e):
         registerbtn.configure(bg='cyan')
     def on_leaveregisterbtn(e):
         registerbtn.configure(bg='blue')
     def registerregisterBtnfunc():
-        user = username.get()
-        passw = password.get()
-        conpassw = confirmpassword.get()
+        username = usernameval.get()
+        passw = passwordval.get()
+        conpassw = confirmpasswordval.get()
         role = roleval.get()
-        if(user =="" or passw == "" or conpassw == ""):
+        custname = custnameval.get()
+        mobile = mobileval.get()
+        address = addressval.get()
+        if(custname.strip()=="" or mobile.strip()=="" or address.strip()=="" or username =="" or passw == "" or conpassw == ""):
             messagebox.showinfo("Error","All fields are required",parent=registerroot)
+        elif(len(mobile.strip()) != 10):
+            messagebox.showinfo("Error","Invalid Phone Number",parent=registerroot)
         elif(passw != conpassw):
             messagebox.showinfo("Error","Both password fields should be same...!!!",parent=registerroot)
         else:
@@ -91,8 +98,8 @@ def registerBtnfunc():
                 mycursor = con.cursor()
                 query = 'use inventoryDB;'
                 mycursor.execute(query)
-                query = 'insert into login_info values(%s,%s,%s,%s);'
-                t = mycursor.execute(query,(user,passw,conpassw,role))
+                query = 'insert into login_info values(%s,%s,%s,%s,%s,%s,%s);'
+                t = mycursor.execute(query,(username,passw,conpassw,role,custname,mobile,address))
                 if(t == True):
                     messagebox.showinfo('Notification','Registered Successfully...!!!',parent=registerroot)
                     if(role == "Manufacturer"):
@@ -106,92 +113,96 @@ def registerBtnfunc():
                 return 
 
     #############################################################Labels
-    titleLabel = Label(registerroot,text='Register Page',font=('times',20,'italic bold'),bg='gold',fg='red')
-    titleLabel.place(x=0,y=0,relwidth=1)
-    
-#     logoLabel = Label(registerroot) #,image = logoimg)
-#     logoLabel.place(x=250,y=50)
 
-    usernameLabel = Label(registerroot,text = "Username",font=('times',15,'italic bold'),bg='gold2')
-    usernameLabel.place(x=100,y=270)
+    usernameLabel = Label(registerroot,text = "Username",font=('times',15,'italic bold'),bg='powder blue')
+    usernameLabel.place(x=70,y=70)
 
-    passwordLabel = Label(registerroot,text = "Password",font=('times',15,'italic bold'),bg='gold2')
-    passwordLabel.place(x=100,y=350)
+    passwordLabel = Label(registerroot,text = "Password",font=('times',15,'italic bold'),bg='powder blue')
+    passwordLabel.place(x=70,y=130)
         
-    confirmpasswordLabel = Label(registerroot,text = "Confirm Password",font=('times',15,'italic bold'),bg='gold2')
-    confirmpasswordLabel.place(x=100,y=430)
-    
-    roleLabel = Label(registerroot,text = "Choose Role",font=('times',15,'italic bold'),bg='gold2')
-    roleLabel.place(x=100,y=510)
+    confirmpasswordLabel = Label(registerroot,text = "Confirm Password",font=('times',15,'italic bold'),bg='powder blue')
+    confirmpasswordLabel.place(x=70,y=190)
+
+    roleLabel = Label(registerroot,text = "Choose Role",font=('times',15,'italic bold'),bg='powder blue')
+    roleLabel.place(x=70,y=250)
+
+    custnameLabel = Label(registerroot,text="Enter Name ",bg = 'powder blue',font = ('times',15,'bold italic'),anchor='w')
+    custnameLabel.place(x=70,y=310)
+
+    mobileLabel = Label(registerroot,text="Enter Mobile No. ",bg = 'powder blue',font = ('times',15,'bold italic'),anchor='w')
+    mobileLabel.place(x=70,y=370)
+
+    addressLabel = Label(registerroot,text="Enter Address ",bg = 'powder blue',font = ('times',15,'bold italic'),anchor='w')
+    addressLabel.place(x=70,y=430)
     
     ############################################################Entry Boxes
-    username = StringVar()
-    password = StringVar()
-    confirmpassword = StringVar()
+    usernameval = StringVar()
+    passwordval = StringVar()
+    confirmpasswordval = StringVar()
     roleval = StringVar()
+    custnameval = StringVar()
+    mobileval = StringVar()
+    addressval = StringVar()
 
-    usernameEntry = Entry(registerroot,textvariable=username,width=30,font=('times',15,'italic'),bd=10,bg='yellow')
-    usernameEntry.place(x=270,y=270)
+    usernameEntry = Entry(registerroot,textvariable=usernameval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+    usernameEntry.place(x=250,y=70)
 
-    passwordEntry = Entry(registerroot,width=30,show='*',textvariable=password,font=('times',15,'italic'),bd=10,bg='yellow')
-    passwordEntry.place(x=270,y=350)
+    passwordEntry = Entry(registerroot,show="*",textvariable=passwordval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+    passwordEntry.place(x=250,y=130)
     
-    confirmpasswordEntry = Entry(registerroot,width=30,show='*',textvariable=confirmpassword,font=('times',15,'italic'),bd=10,bg='yellow')
-    confirmpasswordEntry.place(x=270,y=430)
-    
+    confirmpasswordEntry = Entry(registerroot,show="*",textvariable=confirmpasswordval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+    confirmpasswordEntry.place(x=250,y=190)
+
     rolechoosen = ttk.Combobox(registerroot, width = 27, textvariable = roleval) 
     rolechoosen['values'] = ('Buyer','Manufacturer')
-    rolechoosen.place(x=270,y=510)
+    rolechoosen.place(x=250,y=250)
     
+    custnameEntry = Entry(registerroot,textvariable=custnameval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+    custnameEntry.place(x=250,y=310)
+
+    mobileEntry = Entry(registerroot,textvariable=mobileval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+    mobileEntry.place(x=250,y=370)
+
+    addressEntry = Entry(registerroot,textvariable=addressval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+    addressEntry.place(x=250,y=430)
+
     registerbtn = Button(registerroot,text='Register Now',font=('times',15,'italic bold'),bg='blue',bd=10,activebackground = 'red',
                    activeforeground='white',command = registerregisterBtnfunc)
-    registerbtn.place(x=250,y=560)
+    registerbtn.place(x=230,y=490)
     registerbtn.bind('<Enter>',on_enterregisterbtn)
     registerbtn.bind('<Leave>',on_leaveregisterbtn)
 
-
-############################################################Background Image Setting
-# bg_label = Label(root,image = bgimg).pack() 
-
-dashboardframe=Frame(root,bg="#009999")
-dashboardframe.place(x=0,y=120,relwidth=1)
-
 #############################################################Labels
-titleLabel = Label(root,text='Login Page',font=('times',20,'italic bold'),bg='gold2',fg='red')
-titleLabel.place(x=0,y=0,relwidth=1)
-       
-logoLabel = Label(root) #,image = logoimg)
-logoLabel.place(x=250,y=50)
  
-usernameLabel = Label(root,text = "Username",font=('times',15,'italic bold'),bg='gold2')
-usernameLabel.place(x=90,y=270)
+usernameLabel = Label(root,text = "Username",font=('times',15,'italic bold'),bg='powder blue')
+usernameLabel.place(x=90,y=70)
 
-passwordLabel = Label(root,text = "Password",font=('times',15,'italic bold'),bg='gold2')
-passwordLabel.place(x=90,y=350)
+passwordLabel = Label(root,text = "Password",font=('times',15,'italic bold'),bg='powder blue')
+passwordLabel.place(x=90,y=130)
 
 ############################################################Entry Boxes
-username = StringVar()
-password = StringVar()
+usernameval = StringVar()
+passwordval = StringVar()
 
-usernameEntry = Entry(root,textvariable=username,width=30,font=('times',15,'italic'),bd=10,bg='yellow')
-usernameEntry.place(x=230,y=270)
+usernameEntry = Entry(root,textvariable=usernameval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+usernameEntry.place(x=230,y=70)
 
-passwordEntry = Entry(root,width=30,show='*',textvariable=password,font=('times',15,'italic'),bd=10,bg='yellow')
-passwordEntry.place(x=230,y=350)
+passwordEntry = Entry(root,show="*",textvariable=passwordval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+passwordEntry.place(x=230,y=130)
 
 ##############################################################BUtton
 loginbtn = Button(root,text='Login',font=('times',15,'italic bold'),bg='blue',bd=10,activebackground = 'red',
                    activeforeground='white',command = loginBtnfunc)
-loginbtn.place(x=250,y=420)
+loginbtn.place(x=270,y=190)
 loginbtn.bind('<Enter>',on_enterloginbtn)
 loginbtn.bind('<Leave>',on_leaveloginbtn)
 
-orLabel = Label(root,text = "OR...Not yet Registered!!! Register Below",font=('times',15,'italic bold'),bg='gold2')
-orLabel.place(x=150,y=500)
+orLabel = Label(root,text = "OR...Not yet Registered!!! Register Below",font=('times',15,'italic bold'),bg='powder blue')
+orLabel.place(x=150,y=260)
 
 registerbtn = Button(root,text='Register Now',font=('times',15,'italic bold'),bg='blue',bd=10,activebackground = 'red',
                    activeforeground='white',command = registerBtnfunc)
-registerbtn.place(x=230,y=550)
+registerbtn.place(x=240,y=310)
 registerbtn.bind('<Enter>',on_enterregisterbtn)
 registerbtn.bind('<Leave>',on_leaveregisterbtn)
 
