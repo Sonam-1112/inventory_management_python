@@ -57,11 +57,11 @@ def loginBtnfunc():
                     if(i[3] == 'Manufacturer'):
                         print("True")
                         root.destroy()
-                        Manufacturer_View.mains(user)
+                        Manufacturer_View.mains()
                     else:
                         print("Buyer Login")
                         root.destroy()
-                        Buyer_View.mains(user)
+                        Buyer_View.mains()
             else:
                 messagebox.showerror('Notification','Incorrect Username or Password!!!\nPlease try again...')
         except:
@@ -103,9 +103,11 @@ def registerBtnfunc():
                 if(t == True):
                     messagebox.showinfo('Notification','Registered Successfully...!!!',parent=registerroot)
                     if(role == "Manufacturer"):
-                        Manufacturer_View.root.mainloop()
+                        print("Manufacturer Login")
+                        Manufacturer_View.mains()
                     else:
                         print("Buyer Login")
+                        Manufacturer_View.mains()
                 else:
                     messagebox.showerror('Notification','Some Error occured while registering!!!\nPlease try again...',parent=registerroot)
             except:
