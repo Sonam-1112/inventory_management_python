@@ -12,6 +12,7 @@ import pymysql
 import import_ipynb
 from pandas import DataFrame
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from datetime import datetime
 # import Buyer_View
 # import Billing_Software
 
@@ -60,7 +61,7 @@ style.configure('Treeview',font=('times',12,'italic'),foreground='black',backgro
 scroll_x = Scrollbar(homeinfotableFrame,orient = HORIZONTAL)
 scroll_y = Scrollbar(homeinfotableFrame,orient = VERTICAL)
 
-homeinfoTable = Treeview(homeinfotableFrame,columns = ('Order ID','Customer Name','Mobile No.','Email','Address','Gender','Order Date'
+homeinfoTable = Treeview(homeinfotableFrame,columns = ('Order ID','Customer Name','Mobile No.','Email','Address','Order Date'
                         ,'Status'),yscrollcommand=scroll_y.set,xscrollcommand=scroll_x.set)
 
 scroll_x.pack(side=BOTTOM,fill=X)
@@ -73,7 +74,6 @@ homeinfoTable.heading('Customer Name',text='Customer Name')
 homeinfoTable.heading('Mobile No.',text='Mobile No.')
 homeinfoTable.heading('Email',text='Email')
 homeinfoTable.heading('Address',text='Address')
-homeinfoTable.heading('Gender',text='Gender')
 homeinfoTable.heading('Order Date',text='Order Date')
 homeinfoTable.heading('Status',text='Status')
 
@@ -84,7 +84,6 @@ homeinfoTable.column('Customer Name',width=200,anchor="center")
 homeinfoTable.column('Mobile No.',width=200,anchor="center")
 homeinfoTable.column('Email',width=300,anchor="center")
 homeinfoTable.column('Address',width=300,anchor="center")
-homeinfoTable.column('Gender',width=100,anchor="center")
 homeinfoTable.column('Order Date',width=150,anchor="center")
 homeinfoTable.column('Status',width=150,anchor="center")
 
@@ -95,7 +94,7 @@ mycursor.execute(query)
 data = mycursor.fetchall()
 homeinfoTable.delete(*homeinfoTable.get_children())
 for i in data:
-    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
+    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
     homeinfoTable.insert('',END,values=vv)
 
 #########################################################################Show Products Function
@@ -457,8 +456,7 @@ def showProducts():
     deleteProductBtn.place(x=400,y=20)
         
     searchProductBtn = Button(showProductsroot,text="Search Product",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
-            ,relief=RIDGE,activebackground='red',activeforeground='white',command=searchProductBtnfunc)
-            ,relief=RIDGE,activebackground='red',activeforeground='white',command=searchProductBtnfunc)
+                            ,relief=RIDGE,activebackground='red',activeforeground='white',command=searchProductBtnfunc)
     searchProductBtn.place(x=700,y=20)
 
 #########################################################################Show Distribution Function
@@ -481,7 +479,7 @@ def showDistribution():
     scroll_x = Scrollbar(infotableFrame,orient = HORIZONTAL)
     scroll_y = Scrollbar(infotableFrame,orient = VERTICAL)
 
-    infoTable = Treeview(infotableFrame,columns = ('Order ID','Customer Name','Mobile No.','Email','Address','Gender','Order Date'
+    infoTable = Treeview(infotableFrame,columns = ('Order ID','Customer Name','Mobile No.','Email','Address','Order Date'
                             ,'Status'),yscrollcommand=scroll_y.set,xscrollcommand=scroll_x.set)
 
     scroll_x.pack(side=BOTTOM,fill=X)
@@ -494,7 +492,6 @@ def showDistribution():
     infoTable.heading('Mobile No.',text='Mobile No.')
     infoTable.heading('Email',text='Email')
     infoTable.heading('Address',text='Address')
-    infoTable.heading('Gender',text='Gender')
     infoTable.heading('Order Date',text='Order Date')
     infoTable.heading('Status',text='Status')
 
@@ -505,7 +502,6 @@ def showDistribution():
     infoTable.column('Mobile No.',width=200,anchor="center")
     infoTable.column('Email',width=300,anchor="center")
     infoTable.column('Address',width=300,anchor="center")
-    infoTable.column('Gender',width=100,anchor="center")
     infoTable.column('Order Date',width=150,anchor="center")
     infoTable.column('Status',width=150,anchor="center")
 
@@ -516,7 +512,7 @@ def showDistribution():
     data = mycursor.fetchall()
     infoTable.delete(*infoTable.get_children())
     for i in data:
-        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
+        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
         infoTable.insert('',END,values=vv)
         
     def showBuyerDetailsBtnfunc():
@@ -536,7 +532,7 @@ def showDistribution():
             data = mycursor.fetchall()
             infoTable.delete(*infoTable.get_children())
             for i in data:
-                vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
+                vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
                 infoTable.insert('',END,values=vv)
                     
             query = 'select * from customerinfo;'
@@ -544,234 +540,217 @@ def showDistribution():
             data = mycursor.fetchall()
             homeinfoTable.delete(*homeinfoTable.get_children())
             for i in data:
-                vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
+                vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
                 homeinfoTable.insert('',END,values=vv) 
                     
-        def searchCustomerBtnfunc():
-            searchroot = Toplevel()
-            searchroot.geometry('550x560+300+100')
-            searchroot.grab_set()                                           ######Untill this window is closed nothing will work
-    #         searchroot.iconbitmap('student.ico')
-            searchroot.resizable(False,False)
-            searchroot.title('Search Products')
-            searchroot.configure(bg = 'powder blue')
+    def searchCustomerBtnfunc():
+        searchroot = Toplevel()
+        searchroot.geometry('550x560+300+100')
+        searchroot.grab_set()                                           ######Untill this window is closed nothing will work
+    #        searchroot.iconbitmap('student.ico')
+        searchroot.resizable(False,False)
+        searchroot.title('Search Products')
+        searchroot.configure(bg = 'powder blue')
 
-            def on_entersubmitsearchbtn(e):
-                submitsearchbtn.configure(bg='red')
-            def on_leavesubmitsearchbtn(e):
-                submitsearchbtn.configure(bg='blue')
-            def submitsearchfunc():
-                s_orderid = s_orderidval.get() 
-                s_custname = s_custnameval.get() 
-                s_mobile = s_mobileval.get()
-                s_email = s_emailval.get() 
-                s_address = s_addressval.get() 
-                s_gender = s_genderval.get() 
-                s_orderdate = s_orderdateval.get()  
-                s_status = s_statusval.get()
-                if(s_orderid !=''):
-                    query = 'select * from customerinfo where orderid=%s;'
-                    mycursor.execute(query,(s_orderid))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
+        def on_entersubmitsearchbtn(e):
+            submitsearchbtn.configure(bg='red')
+        def on_leavesubmitsearchbtn(e):
+            submitsearchbtn.configure(bg='blue')
+        def submitsearchfunc():
+            s_orderid = s_orderidval.get() 
+            s_custname = s_custnameval.get() 
+            s_mobile = s_mobileval.get()
+            s_email = s_emailval.get() 
+            s_address = s_addressval.get()  
+            s_orderdate = s_orderdateval.get()  
+            s_status = s_statusval.get()
+            if(s_orderid !=''):
+                query = 'select * from customerinfo where orderid=%s;'
+                mycursor.execute(query,(s_orderid))
+                data = mycursor.fetchall()
+                infoTable.delete(*infoTable.get_children())
+                for i in data:
+                    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
+                    infoTable.insert('',END,values=vv)
 
-                if(s_custname !=''):
-                    query = 'select * from customerinfo where customername=%s;'
-                    mycursor.execute(query,(s_custname))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
+            if(s_custname !=''):
+                query = 'select * from customerinfo where customername=%s;'
+                mycursor.execute(query,(s_custname))
+                data = mycursor.fetchall()
+                infoTable.delete(*infoTable.get_children())
+                for i in data:
+                    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
+                    infoTable.insert('',END,values=vv)
 
-                if(s_mobile !=''):
-                    query = 'select * from customerinfo where mobile_no=%s;'
-                    mycursor.execute(query,(s_mobile))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
+            if(s_mobile !=''):
+                query = 'select * from customerinfo where mobile_no=%s;'
+                mycursor.execute(query,(s_mobile))
+                data = mycursor.fetchall()
+                infoTable.delete(*infoTable.get_children())
+                for i in data:
+                    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
+                    infoTable.insert('',END,values=vv)
 
-                if(s_email !=''):
-                    query = 'select * from customerinfo where email=%s;'
-                    mycursor.execute(query,(s_email))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
+            if(s_email !=''):
+                query = 'select * from customerinfo where email=%s;'
+                mycursor.execute(query,(s_email))
+                data = mycursor.fetchall()
+                infoTable.delete(*infoTable.get_children())
+                for i in data:
+                    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
+                    infoTable.insert('',END,values=vv)
 
-                if(s_address !=''):
-                    query = 'select * from customerinfo where address=%s;'
-                    mycursor.execute(query,(s_address))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
+            if(s_address !=''):
+                query = 'select * from customerinfo where address=%s;'
+                mycursor.execute(query,(s_address))
+                data = mycursor.fetchall()
+                infoTable.delete(*infoTable.get_children())
+                for i in data:
+                    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
+                    infoTable.insert('',END,values=vv)
 
-                if(s_gender !=''):
-                    query = 'select * from customerinfo where gender=%s;'
-                    mycursor.execute(query,(s_gender))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
+            if(s_orderdate !=''):
+                query = 'select * from customerinfo where orderdate=%s;'
+                mycursor.execute(query,(s_orderdate))
+                data = mycursor.fetchall()
+                infoTable.delete(*infoTable.get_children())
+                for i in data:
+                    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
+                    infoTable.insert('',END,values=vv)
 
-                if(s_orderdate !=''):
-                    query = 'select * from customerinfo where orderdate=%s;'
-                    mycursor.execute(query,(s_orderdate))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
+            if(s_status !=''):
+                query = 'select * from customerinfo where deliverystatus=%s;'
+                mycursor.execute(query,(s_status))
+                data = mycursor.fetchall()
+                infoTable.delete(*infoTable.get_children())
+                for i in data:
+                    vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
+                    infoTable.insert('',END,values=vv)
+        #################################################Labels
+        s_orderidLabel = Label(searchroot,text="Enter ID : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        s_orderidLabel.place(x=10,y=10)
 
-                if(s_status !=''):
-                    query = 'select * from customerinfo where deliverystatus=%s;'
-                    mycursor.execute(query,(s_status))
-                    data = mycursor.fetchall()
-                    infoTable.delete(*infoTable.get_children())
-                    for i in data:
-                        vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]]
-                        infoTable.insert('',END,values=vv)
-            #################################################Labels
-            s_orderidLabel = Label(searchroot,text="Enter ID : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_orderidLabel.place(x=10,y=10)
+        s_custnameLabel = Label(searchroot,text="Enter Name : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        s_custnameLabel.place(x=10,y=70)
 
-            s_custnameLabel = Label(searchroot,text="Enter Name : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_custnameLabel.place(x=10,y=70)
+        s_mobileLabel = Label(searchroot,text="Enter Mobile No. : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        s_mobileLabel.place(x=10,y=130)
 
-            s_mobileLabel = Label(searchroot,text="Enter Mobile No. : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_mobileLabel.place(x=10,y=130)
+        s_emailLabel = Label(searchroot,text="Enter Email : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        s_emailLabel.place(x=10,y=190)
 
-            s_emailLabel = Label(searchroot,text="Enter Email : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_emailLabel.place(x=10,y=190)
+        s_addressLabel = Label(searchroot,text="Enter Address : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        s_addressLabel.place(x=10,y=250)
 
-            s_addressLabel = Label(searchroot,text="Enter Address : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_addressLabel.place(x=10,y=250)
-
-            s_genderLabel = Label(searchroot,text="Enter Gender : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_genderLabel.place(x=10,y=310)
-
-            s_orderdateLabel = Label(searchroot,text="Enter Order Date : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_orderdateLabel.place(x=10,y=370)
+        s_orderdateLabel = Label(searchroot,text="Enter Order Date : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        s_orderdateLabel.place(x=10,y=310)
             
-            s_statusLabel = Label(searchroot,text="Enter Status : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
-            s_statusLabel.place(x=10,y=430)
+        s_statusLabel = Label(searchroot,text="Enter Status : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        s_statusLabel.place(x=10,y=370)
 
-            #################################################Entry Boxes
-            s_orderidval = StringVar()
-            s_custnameval = StringVar()
-            s_mobileval = StringVar()
-            s_emailval = StringVar()
-            s_addressval = StringVar()
-            s_genderval = StringVar()
-            s_orderdateval = StringVar()
-            s_statusval = StringVar()
+        #################################################Entry Boxes
+        s_orderidval = StringVar()
+        s_custnameval = StringVar()
+        s_mobileval = StringVar()
+        s_emailval = StringVar()
+        s_addressval = StringVar()
+        s_orderdateval = StringVar()
+        s_statusval = StringVar()
 
-            s_orderidEntry = Entry(searchroot,textvariable=s_orderidval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_orderidEntry.place(x=240,y=10)
+        s_orderidEntry = Entry(searchroot,textvariable=s_orderidval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        s_orderidEntry.place(x=240,y=10)
 
-            s_custnameEntry = Entry(searchroot,textvariable=s_custnameval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_custnameEntry.place(x=240,y=70)
+        s_custnameEntry = Entry(searchroot,textvariable=s_custnameval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        s_custnameEntry.place(x=240,y=70)
 
-            s_mobileEntry = Entry(searchroot,textvariable=s_mobileval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_mobileEntry.place(x=240,y=130)
+        s_mobileEntry = Entry(searchroot,textvariable=s_mobileval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        s_mobileEntry.place(x=240,y=130)
 
-            s_emailEntry = Entry(searchroot,textvariable=s_emailval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_emailEntry.place(x=240,y=190)
+        s_emailEntry = Entry(searchroot,textvariable=s_emailval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        s_emailEntry.place(x=240,y=190)
 
-            s_addressEntry = Entry(searchroot,textvariable=s_addressval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_addressEntry.place(x=240,y=250)
+        s_addressEntry = Entry(searchroot,textvariable=s_addressval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        s_addressEntry.place(x=240,y=250)
 
-            s_genderEntry = Entry(searchroot,textvariable=s_genderval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_genderEntry.place(x=240,y=310)
-
-            s_orderdateEntry = Entry(searchroot,textvariable=s_orderdateval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_orderdateEntry.place(x=240,y=370)
+        s_orderdateEntry = Entry(searchroot,textvariable=s_orderdateval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        s_orderdateEntry.place(x=240,y=310)
             
-            s_statusEntry = Entry(searchroot,textvariable=s_statusval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
-            s_statusEntry.place(x=240,y=430)
+        s_statusEntry = Entry(searchroot,textvariable=s_statusval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        s_statusEntry.place(x=240,y=370)
 
-            ########################################################Buttons
-            submitsearchbtn = Button(searchroot,text='Search',font=('Arial',15,'bold'),width=10,bg='blue',activebackground='red'
-                            ,activeforeground='white',relief=GROOVE,bd=9,command = submitsearchfunc)
-            submitsearchbtn.place(x=190,y=480)
-            submitsearchbtn.bind('<Enter>',on_entersubmitsearchbtn)
-            submitsearchbtn.bind('<Leave>',on_leavesubmitsearchbtn)
+        ########################################################Buttons
+        submitsearchbtn = Button(searchroot,text='Search',font=('Arial',15,'bold'),width=10,bg='blue',activebackground='red'
+                        ,activeforeground='white',relief=GROOVE,bd=9,command = submitsearchfunc)
+        submitsearchbtn.place(x=190,y=480)
+        submitsearchbtn.bind('<Enter>',on_entersubmitsearchbtn)
+        submitsearchbtn.bind('<Leave>',on_leavesubmitsearchbtn)
         
-        ##########################################################################Distribution Root Buttons
-        showBuyerDetailsBtn = Button(showDistributionroot,text="Show Details",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=showBuyerDetailsBtnfunc)
-        showBuyerDetailsBtn.place(x=100,y=20)
+    ##########################################################################Distribution Root Buttons
+    showBuyerDetailsBtn = Button(showDistributionroot,text="Show Details",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
+            ,relief=RIDGE,activebackground='red',activeforeground='white',command=showBuyerDetailsBtnfunc)
+    showBuyerDetailsBtn.place(x=100,y=20)
         
-        deleteProductBtn = Button(showDistributionroot,text="Delete Buyer",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=deleteCustomerBtnfunc)
-        deleteProductBtn.place(x=400,y=20)
+    deleteProductBtn = Button(showDistributionroot,text="Delete Buyer",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
+            ,relief=RIDGE,activebackground='red',activeforeground='white',command=deleteCustomerBtnfunc)
+    deleteProductBtn.place(x=400,y=20)
         
-        searchProductBtn = Button(showDistributionroot,text="Search Buyer",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=searchCustomerBtnfunc)
-        searchProductBtn.place(x=700,y=20)
+    searchProductBtn = Button(showDistributionroot,text="Search Buyer",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
+            ,relief=RIDGE,activebackground='red',activeforeground='white',command=searchCustomerBtnfunc)
+    searchProductBtn.place(x=700,y=20)
 
-    #########################################################################Show Analysis Function
+#########################################################################Show Analysis Function
         
-    def showAnalysis():
-        showAnalysisroot = Toplevel()
-        showAnalysisroot.geometry('1174x700+200+50')
-        showAnalysisroot.grab_set()                                           ######Untill this window is closed nothing will work
-        showAnalysisroot.resizable(False,False)
-        showAnalysisroot.title("Analysis Panel")
-        showAnalysisroot.configure(bg = 'powder blue')
-    #     td = pd.read_excel('Sample.xlsx', engine='openpyxl')
-    #     sns.countplot(x='Product',data=td)
-        data1 = {'Country': ['US','CA','GER','UK','FR'],
-            'GDP_Per_Capita': [45000,42000,52000,49000,47000]
-            }
-        df1 = DataFrame(data1,columns=['Country','GDP_Per_Capita'])
-        figure1 = plt.Figure(figsize=(3,6), dpi=100)
-        ax1 = figure1.add_subplot(111)
-        bar1 = FigureCanvasTkAgg(figure1, showAnalysisroot)
-        bar1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH)
-        df1 = df1[['Country','GDP_Per_Capita']].groupby('Country').sum()
-        df1.plot(kind='bar', legend=True, ax=ax1)
-        ax1.set_title('Country Vs. GDP Per Capita')
-    #########################################################################Logout Button Function
-    def logout():
-        rr = messagebox.askyesnocancel("Confirmation","Are you sure you want to exit?",parent=DataEntryFrame)
-        if(rr == True):
-            root.destroy() 
-    ######################################################FrontPageButtonsFrame#################################
-    DataEntryFrame = Frame(root,bg = 'gold2',relief=GROOVE,borderwidth=5,width=400,height=670)
-    DataEntryFrame.place(x=10,y=20)
+def showAnalysis():
+    showAnalysisroot = Toplevel()
+    showAnalysisroot.geometry('1174x700+200+50')
+    showAnalysisroot.grab_set()                                           ######Untill this window is closed nothing will work
+    showAnalysisroot.resizable(False,False)
+    showAnalysisroot.title("Analysis Panel")
+    showAnalysisroot.configure(bg = 'powder blue')
+#     td = pd.read_excel('Sample.xlsx', engine='openpyxl')
+#     sns.countplot(x='Product',data=td)
+    data1 = {'Country': ['US','CA','GER','UK','FR'],
+        'GDP_Per_Capita': [45000,42000,52000,49000,47000]
+        }
+    df1 = DataFrame(data1,columns=['Country','GDP_Per_Capita'])
+    figure1 = plt.Figure(figsize=(3,6), dpi=100)
+    ax1 = figure1.add_subplot(111)
+    bar1 = FigureCanvasTkAgg(figure1, showAnalysisroot)
+    bar1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH)
+    df1 = df1[['Country','GDP_Per_Capita']].groupby('Country').sum()
+    df1.plot(kind='bar', legend=True, ax=ax1)
+    ax1.set_title('Country Vs. GDP Per Capita')
+#########################################################################Logout Button Function
+def logout():
+    rr = messagebox.askyesnocancel("Confirmation","Are you sure you want to exit?",parent=DataEntryFrame)
+    if(rr == True):
+        root.destroy() 
+######################################################FrontPageButtonsFrame#################################
+DataEntryFrame = Frame(root,bg = 'gold2',relief=GROOVE,borderwidth=5,width=400,height=670)
+DataEntryFrame.place(x=10,y=20)
 
-    frontLabel = Label(DataEntryFrame,text='--------------Welcome-----------',width=21,font=('arial',22,'italic bold')
-                    ,bg='gold2')
-    frontLabel.place(x=0,y=0)
+frontLabel = Label(DataEntryFrame,text='--------------Welcome-----------',width=21,font=('arial',22,'italic bold')
+                ,bg='gold2')
+frontLabel.place(x=0,y=0)
 
-    homeBtn = Button(DataEntryFrame,text="1. Home",width=20,font=('arial',20,'italic'),bd=6,bg='red'
-                ,relief=RIDGE,activebackground='red',activeforeground='white')
-    homeBtn.place(x=25,y=40)
+homeBtn = Button(DataEntryFrame,text="1. Home",width=20,font=('arial',20,'italic'),bd=6,bg='red'
+            ,relief=RIDGE,activebackground='red',activeforeground='white')
+homeBtn.place(x=25,y=40)
 
-    productBtn = Button(DataEntryFrame,text="2. Products",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=showProducts)
-    productBtn.place(x=25,y=120)
+productBtn = Button(DataEntryFrame,text="2. Products",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
+            ,relief=RIDGE,activebackground='red',activeforeground='white',command=showProducts)
+productBtn.place(x=25,y=120)
 
-    distributionBtn = Button(DataEntryFrame,text="3. Distribution",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=showDistribution)
-    distributionBtn.place(x=25,y=200)
+distributionBtn = Button(DataEntryFrame,text="3. Distribution",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
+            ,relief=RIDGE,activebackground='red',activeforeground='white',command=showDistribution)
+distributionBtn.place(x=25,y=200)
 
-    analysisBtn = Button(DataEntryFrame,text="4. Analysis",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=showAnalysis)
-    analysisBtn.place(x=25,y=280)
+analysisBtn = Button(DataEntryFrame,text="4. Analysis",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
+            ,relief=RIDGE,activebackground='red',activeforeground='white',command=showAnalysis)
+analysisBtn.place(x=25,y=280)
 
-    logoutBtn = Button(DataEntryFrame,text="6. Logout",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=logout)
-    logoutBtn.place(x=25,y=360)
+logoutBtn = Button(DataEntryFrame,text="6. Logout",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
+            ,relief=RIDGE,activebackground='red',activeforeground='white',command=logout)
+logoutBtn.place(x=25,y=360)
 
-    root.mainloop()
+root.mainloop()

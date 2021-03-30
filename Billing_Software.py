@@ -6,6 +6,7 @@ import os
 import pymysql
 from tkinter.ttk import Treeview
 from tkinter import ttk
+from datetime import datetime
 # import Manufacturer_View
 # import Buyer_View
 
@@ -45,6 +46,10 @@ def on_leaveplaceorderbtn(e):
     placeorderbtn.configure(bg='blue')
 
 def placeorderfunc():
+    def on_entersubmitplaceorderbtn(e):
+        submitplaceorderbtn.configure(bg='red')
+    def on_leavesubmitplaceorderbtn(e):
+        submitplaceorderbtn.configure(bg='blue')
     custname = custnameval.get()
     custphone = custphoneval.get()
     if(custname.strip()==""):
@@ -56,6 +61,7 @@ def placeorderfunc():
     else:
         global bill_no
         bill_no = StringVar()
+        x = random.randint(1000,9999)
         x = random.randint(1000,9999)
         bill_no.set(str(x))
         billarea.delete('1.0',END)
@@ -69,7 +75,56 @@ def placeorderfunc():
         file = open(f"temp_bills{custphoneval.get()}.txt","r")
         line = file.read()
         billarea.insert(END,f"{line}")
-        savebill()
+
+        placeorderWin = Toplevel()
+        placeorderWin.geometry('550x230+500+250')
+        placeorderWin.grab_set()                                          ######Untill this window is closed nothing will work
+        placeorderWin.resizable(False,False)
+        placeorderWin.title("Product Details")
+        placeorderWin.configure(bg = 'powder blue')
+        def submitplaceorderfunc():
+            askorderid = bill_no.get() 
+            askname = custnameval.get() 
+            askphone = custphoneval.get()
+            askemail = askemailval.get() 
+            askaddress = askaddressval.get() 
+            askorderdate = datetime.today().strftime('%Y-%m-%d') 
+            askdeliverstatus = "Pending"
+            if(askemail.strip()=="" or askaddress.strip()==""):
+                messagebox.showinfo("Info","Please fill all details...!!!",parent=placeorderWin)
+            else:
+                try:
+                    query = 'insert into customerinfo values(%s,%s,%s,%s,%s,%s,%s);'
+                    mycursor.execute(query,(askorderid,askname,askphone,askemail,askaddress,askorderdate,askdeliverstatus))
+                    con.commit()
+                    messagebox.showinfo('Notification','Your Order Placed Successfully...',parent=placeorderWin)
+                    savebill()
+                except:
+                    pass
+        #################################################Labels
+        askemailLabel = Label(placeorderWin,text="Enter Email : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        askemailLabel.place(x=10,y=20)
+
+        askaddressLabel = Label(placeorderWin,text="Enter Address : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+        askaddressLabel.place(x=10,y=80)
+
+        #################################################Entry Boxes
+        askemailval = StringVar()
+        askaddressval = StringVar()
+        
+        askemailEntry = Entry(placeorderWin,textvariable=askemailval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        askemailEntry.place(x=240,y=20)
+
+        askaddressEntry = Entry(placeorderWin,textvariable=askaddressval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+        askaddressEntry.place(x=240,y=80)
+
+        ########################################################Buttons
+        submitplaceorderbtn = Button(placeorderWin,text='Submit',font=('Arial',13,'bold'),width=7,bg='blue',activebackground='red'
+                            ,activeforeground='white',relief=GROOVE,bd=9,command = submitplaceorderfunc)
+        submitplaceorderbtn.place(x=200,y=160)
+        submitplaceorderbtn.bind('<Enter>',on_entersubmitplaceorderbtn)
+        submitplaceorderbtn.bind('<Leave>',on_leavesubmitplaceorderbtn)
+
 placeorderbtn = Button(root,text='Place Order',font=('Arial',15,'bold'),width=10,bg='blue',foreground="white",activebackground='red'
                             ,activeforeground='white',relief=GROOVE,bd=9,command = placeorderfunc)
 placeorderbtn.place(x=130,y=600)
