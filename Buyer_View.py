@@ -12,7 +12,7 @@ import import_ipynb
 import Manufacturer_View
 import Billing_Software
 
-def mains(usename):
+def mains():
     root = Tk()
     root.geometry('1174x700+200+50')
     root.resizable(False,False)

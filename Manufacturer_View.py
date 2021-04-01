@@ -45,10 +45,27 @@ pendingLabel = Label(pendingFrame,text="Pending : ",bg = 'red',font = ('times',2
                     ,borderwidth=5)
 pendingLabel.place(x=70,y=10)
 
+pendingnumberLabel = Label(pendingFrame,bg = 'gold2',font = ('times',20,'bold italic'),anchor='w',relief=GROOVE
+                    ,borderwidth=5)
+pendingnumberLabel.place(x=120,y=80)
+
+query = "select count(*) from customerinfo where deliverystatus=%s;"
+mycursor.execute(query,("Pending"))
+count = mycursor.fetchone()
+pendingnumberLabel['text']=count
 ##################################################################Delivered Labels
 deliveredLabel = Label(deliveredFrame,text="Delivered : ",bg = 'green',font = ('times',20,'bold italic'),anchor='w',
                     relief=GROOVE,borderwidth=5)
 deliveredLabel.place(x=70,y=10)
+
+deliverednumberLabel = Label(deliveredFrame,bg = 'gold2',font = ('times',20,'bold italic'),anchor='w',
+                    relief=GROOVE,borderwidth=5)
+deliverednumberLabel.place(x=120,y=80)
+
+query = "select count(*) from customerinfo where deliverystatus=%s;"
+mycursor.execute(query,("Delivered"))
+count = mycursor.fetchone()
+deliverednumberLabel['text']=count
 
 ###################################################################Home Page - Info Table
 homeinfotableFrame = Frame(ShowDataFrame,bg = 'gold2',relief=GROOVE,borderwidth=5)
@@ -515,9 +532,53 @@ def showDistribution():
         vv = [i[0],i[1],i[2],i[3],i[4],i[5],i[6]]
         infoTable.insert('',END,values=vv)
         
-    def showBuyerDetailsBtnfunc():
-        pass
-        
+    def select_item(a):
+        popupWin = Toplevel()
+        popupWin.geometry('550x500+500+150')
+        popupWin.grab_set()                                  ######Untill this window is closed nothing will work
+        popupWin.resizable(False,False)
+        popupWin.title("Product Details")
+        popupWin.configure(bg = 'powder blue')
+        def on_enterdeliveredbtn(e):
+            deliveredbtn.configure(bg='red')
+        def on_leavedeliveredbtn(e):
+            deliveredbtn.configure(bg='blue')
+        def deliveredbtnfunc():
+            selectedItemId = test_str_library['values'][0]
+            query = "update customerinfo set deliverystatus=%s where orderid=%s"
+            mycursor.execute(query,("Delivered",selectedItemId))
+        ########################################################Buttons
+        deliveredbtn = Button(popupWin,text='Delivered',font=('Arial',15,'bold'),width=10,bg='blue',foreground="white",activebackground='red'
+                        ,activeforeground='white',relief=GROOVE,bd=9,command = deliveredbtnfunc)
+        deliveredbtn.place(x=190,y=430)
+        deliveredbtn.bind('<Enter>',on_enterdeliveredbtn)
+        deliveredbtn.bind('<Leave>',on_leavedeliveredbtn)
+
+        test_str_library = infoTable.item(infoTable.selection())# gets all the values of the selected row
+        print ('The test_str = ', type(test_str_library), test_str_library,  '\n')  # prints a dictionay of the selected row
+        item = infoTable.selection()[0] # which row did you click on
+        print ('item clicked ', item) # variable that represents the row you clicked on
+        # print (infoTable.item(item)['values'][0]) # prints the first value of the values (the id value)
+        billingFrame = Frame(popupWin,bd=15,relief=GROOVE)
+        billingFrame.place(x=0,y=20,width=550,height=400)
+
+        bill_title = Label(billingFrame,text = 'Bill Area',font=('times',15,'italic'),bd=10,relief=GROOVE)
+        bill_title.pack(fill=X)
+
+        scroll_y = Scrollbar(billingFrame,orient=VERTICAL)
+        billarea = Text(billingFrame,yscrollcommand = scroll_y.set)
+        scroll_y.pack(side=RIGHT,fill=Y)
+        scroll_y.configure(command = billarea.yview)
+        billarea.pack(fill=BOTH,expand=1)
+        # billarea.configure(state='disabled')
+
+        selectedItemId = test_str_library['values'][0]
+        file = open("C:\\Users\\DELL\\Desktop\\Billing_recipts\\"+f"{selectedItemId}.txt","r")
+        line = file.read()
+        billarea.insert(END,f"{line}")
+
+    infoTable.bind('<ButtonRelease-1>', select_item) 
+
     def deleteCustomerBtnfunc():
         cc = infoTable.focus()
         content = infoTable.item(cc)
@@ -686,10 +747,6 @@ def showDistribution():
         submitsearchbtn.bind('<Leave>',on_leavesubmitsearchbtn)
         
     ##########################################################################Distribution Root Buttons
-    showBuyerDetailsBtn = Button(showDistributionroot,text="Show Details",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
-            ,relief=RIDGE,activebackground='red',activeforeground='white',command=showBuyerDetailsBtnfunc)
-    showBuyerDetailsBtn.place(x=100,y=20)
-        
     deleteProductBtn = Button(showDistributionroot,text="Delete Buyer",width=15,font=('arial',20,'italic'),bd=6,bg='yellow'
             ,relief=RIDGE,activebackground='red',activeforeground='white',command=deleteCustomerBtnfunc)
     deleteProductBtn.place(x=400,y=20)

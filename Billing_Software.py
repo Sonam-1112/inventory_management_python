@@ -25,15 +25,11 @@ bill_title = Label(billingFrame,text = 'Bill Area',font=('times',15,'italic'),bd
 bill_title.pack(fill=X)
 
 def savebill():
-    rr = messagebox.askyesnocancel("Save Bill","Do you want to save bill?",parent = root)
-    if(rr == True):
-        bill_data = billarea.get('1.0',END)
-        f1 = open("C:\\Users\\DELL\\Desktop\\Billing_recipts\\"+str(bill_no.get())+".txt","w")
-        f1.write(bill_data)
-        f1.close()
-        messagebox.showinfo('Notification',f'Bill No:{bill_no.get()} saved successfully',parent = root)
-    else:
-        return
+    bill_data = billarea.get('1.0',END)
+    f1 = open("C:\\Users\\DELL\\Desktop\\Billing_recipts\\"+str(bill_no.get())+".txt","w")
+    f1.write(bill_data)
+    f1.close()
+    messagebox.showinfo('Notification',f'Bill No:{bill_no.get()} saved successfully',parent = root)
 
 def on_entersearchbtn(e):
     searchbtn.configure(bg='red')
@@ -62,16 +58,32 @@ def placeorderfunc():
         global bill_no
         bill_no = StringVar()
         x = random.randint(1000,9999)
-        x = random.randint(1000,9999)
         bill_no.set(str(x))
+
         billarea.delete('1.0',END)
         billarea.insert(END,"\tWelcome Dear Customer\n")
         billarea.insert(END,f"\n\nBill Number    : {bill_no.get()}")
         billarea.insert(END,f"\nCustomer Name  : {custnameval.get()}")
         billarea.insert(END,f"\nCustomer Phone : {custphoneval.get()}")
         billarea.insert(END,f"\n===========================================")
-        billarea.insert(END,f"\nProducts\t\tSize\t\tPrice")
-        billarea.insert(END,f"\n===========================================\n")
+        billarea.insert(END,f"\nProducts\t\tSize\t\tPrice\n")
+        billarea.insert(END,f"===========================================\n")
+        total=0
+        list=[]
+        f1 = open(f"temp_bills{custphoneval.get()}.txt","r")
+        line = f1.readlines()
+        for l in line:
+            s = l.split('\t\t')
+            list.append(s[-1])
+        print(list)
+        res = [int(sub.split('\n')[0]) for sub in list]
+        for ele in range(0, len(res)):
+            total = total + res[ele]
+        print(total)
+        file = open(f"temp_bills{custphoneval.get()}.txt","a")
+        file.write(f"\n===========================================")
+        file.write(f"\nTotal Bill\t\t\t{total}\n")
+        file.close()
         file = open(f"temp_bills{custphoneval.get()}.txt","r")
         line = file.read()
         billarea.insert(END,f"{line}")
@@ -222,8 +234,8 @@ def select_item(a):
             billarea.insert(END,f"\nCustomer Name  : {custnameval.get()}")
             billarea.insert(END,f"\nCustomer Phone : {custphoneval.get()}")
             billarea.insert(END,f"\n===========================================")
-            billarea.insert(END,f"\nProducts\t\tSize\t\tPrice")
-            billarea.insert(END,f"\n===========================================\n")
+            billarea.insert(END,f"\nProducts\t\tSize\t\tPrice\n")
+            billarea.insert(END,f"===========================================\n")
             items = items+f"{a_nameEntry['text']}\t\t{a_sizeEntry['text']}\t\t{a_priceEntry['text']}"
             file = open(f"temp_bills{custphoneval.get()}.txt","a")
             file.write(f"{a_nameEntry['text']}\t\t{a_sizeEntry['text']}\t\t{a_priceEntry['text']}\n")
@@ -249,6 +261,9 @@ def select_item(a):
 
     s_colorLabel = Label(popupWin,text="Color : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
     s_colorLabel.place(x=10,y=310)
+
+    s_statusLabel = Label(popupWin,text="Status : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
+    s_statusLabel.place(x=10,y=370)
 
     s_statusLabel = Label(popupWin,text="Status : ",bg = 'powder blue',font = ('times',20,'bold italic'),anchor='w')
     s_statusLabel.place(x=10,y=370)

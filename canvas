@@ -1,3 +1,22 @@
+total=0
+list=[]
+f1 = open("7139.txt","r")
+line = f1.readlines()
+for l in line:
+    s = l.split(' ')
+    list.append(s[-1])
+print(list)
+c = list.index('-------------------------------------------\n')
+sub_list = list[c+1:-2]
+res = [int(sub.split('\n')[0]) for sub in sub_list]
+print(res)
+for ele in range(0, len(res)):
+    total = total + res[ele]
+print(total)
+
+
+
+
 main_frame = Frame(master_frame ,relief= 'ridge' ,bd = 4 )
 main_frame.pack(side = "left",fill = "y")
 
@@ -675,3 +694,37 @@ def showUserInfo():
         savechangesbtn.place(x=200,y=250)
         savechangesbtn.bind('<Enter>',on_entersavechangesbtn)
         savechangesbtn.bind('<Leave>',on_leavesavechangesbtn)
+
+
+
+
+
+
+
+
+Nitin Gupta9:10 PM
+            root.deiconify()
+root.update()
+Nitin Gupta9:27 PM
+    def SendMail():
+        if Emailval.get() == '' :
+            messagebox.showerror('Error',"Email Field Cannot be Empty  !!!",parent = for_frame )
+        else:
+            try:
+                conn = pymysql.connect(host='localhost', user='root', password='')
+                cursor = conn.cursor()
+                query = 'use library;'
+                cursor.execute(query)
+                query = 'select password from admin_logindata WHERE email = %s;'
+                r = cursor.execute(que
+Nitin Gupta9:30 PM
+ t = mycursor.execute(query, (user, passw))
+            if (t == True):
+                root.withdraw()
+                data = mycursor.execute("select name from admin_logindata where username=%s;", (user))
+                data = mycursor.fetchall()
+                for i in data:
+                    Admin_name = i[0]
+                openTop()
+            else:
+                messagebox.showerror('Notification', 'Incorrect Username or Password!!!\nPlease try again...',

@@ -1,0 +1,5 @@
+Colgate		Medium		50
+Soap		Medium		20
+
+===========================================
+Total Bill			70
