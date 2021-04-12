@@ -6,9 +6,9 @@ from tkinter.ttk import Treeview
 from tkinter import ttk
 import import_ipynb
 from datetime import datetime
-# import Manufacturer_View
-# import Buyer_View
-# import Billing_Software
+import Manufacturer_View
+import Buyer_View
+import Billing_Software
 
 root = Tk()
 root.title('Login Page')
@@ -58,11 +58,11 @@ def loginBtnfunc():
                     if(i[3] == 'Manufacturer'):
                         print("True")
                         root.destroy()
-                        Manufacturer_View.mains()
+                        Manufacturer_View.mains(username)
                     else:
                         print("Buyer Login")
                         root.destroy()
-                        Buyer_View.mains()
+                        Buyer_View.mains(username)
             else:
                 messagebox.showerror('Notification','Incorrect Username or Password!!!\nPlease try again...')
         except:
