@@ -1,0 +1,11 @@
+Soap		Medium		20
+Colgate		Medium		50
+Colgate		Medium		50
+Colgate		Medium		50
+Colgate		Medium		50
+Maza		NA		40
+Maza		NA		40
+Maza		NA		40
+
+===========================================
+Total Bill			340

@@ -757,26 +757,26 @@ def mains(username):
 
     #########################################################################Show Analysis Function
             
-    def showAnalysis():
-        showAnalysisroot = Toplevel()
-        showAnalysisroot.geometry('1174x700+200+50')
-        showAnalysisroot.grab_set()                                           ######Untill this window is closed nothing will work
-        showAnalysisroot.resizable(False,False)
-        showAnalysisroot.title("Analysis Panel")
-        showAnalysisroot.configure(bg = 'powder blue')
-    #     td = pd.read_excel('Sample.xlsx', engine='openpyxl')
-    #     sns.countplot(x='Product',data=td)
-        data1 = {'Country': ['US','CA','GER','UK','FR'],
-            'GDP_Per_Capita': [45000,42000,52000,49000,47000]
-            }
-        df1 = DataFrame(data1,columns=['Country','GDP_Per_Capita'])
-        figure1 = plt.Figure(figsize=(3,6), dpi=100)
-        ax1 = figure1.add_subplot(111)
-        bar1 = FigureCanvasTkAgg(figure1, showAnalysisroot)
-        bar1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH)
-        df1 = df1[['Country','GDP_Per_Capita']].groupby('Country').sum()
-        df1.plot(kind='bar', legend=True, ax=ax1)
-        ax1.set_title('Country Vs. GDP Per Capita')
+    # def showAnalysis():
+    #     showAnalysisroot = Toplevel()
+    #     showAnalysisroot.geometry('1174x700+200+50')
+    #     showAnalysisroot.grab_set()                                           ######Untill this window is closed nothing will work
+    #     showAnalysisroot.resizable(False,False)
+    #     showAnalysisroot.title("Analysis Panel")
+    #     showAnalysisroot.configure(bg = 'powder blue')
+    # #     td = pd.read_excel('Sample.xlsx', engine='openpyxl')
+    # #     sns.countplot(x='Product',data=td)
+    #     data1 = {'Country': ['US','CA','GER','UK','FR'],
+    #         'GDP_Per_Capita': [45000,42000,52000,49000,47000]
+    #         }
+    #     df1 = DataFrame(data1,columns=['Country','GDP_Per_Capita'])
+    #     figure1 = plt.Figure(figsize=(3,6), dpi=100)
+    #     ax1 = figure1.add_subplot(111)
+    #     bar1 = FigureCanvasTkAgg(figure1, showAnalysisroot)
+    #     bar1.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH)
+    #     df1 = df1[['Country','GDP_Per_Capita']].groupby('Country').sum()
+    #     df1.plot(kind='bar', legend=True, ax=ax1)
+    #     ax1.set_title('Country Vs. GDP Per Capita')
     #########################################################################Logout Button Function
     def logout():
         rr = messagebox.askyesnocancel("Confirmation","Are you sure you want to exit?",parent=DataEntryFrame)
@@ -802,12 +802,12 @@ def mains(username):
                 ,relief=RIDGE,activebackground='red',activeforeground='white',command=showDistribution)
     distributionBtn.place(x=25,y=200)
 
-    analysisBtn = Button(DataEntryFrame,text="4. Analysis",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
-                ,relief=RIDGE,activebackground='red',activeforeground='white',command=showAnalysis)
-    analysisBtn.place(x=25,y=280)
+    # analysisBtn = Button(DataEntryFrame,text="4. Analysis",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
+    #             ,relief=RIDGE,activebackground='red',activeforeground='white',command=showAnalysis)
+    # analysisBtn.place(x=25,y=280)
 
-    logoutBtn = Button(DataEntryFrame,text="6. Logout",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
+    logoutBtn = Button(DataEntryFrame,text="4. Logout",width=20,font=('arial',20,'italic'),bd=6,bg='light blue'
                 ,relief=RIDGE,activebackground='red',activeforeground='white',command=logout)
-    logoutBtn.place(x=25,y=360)
+    logoutBtn.place(x=25,y=280)
 
     root.mainloop()

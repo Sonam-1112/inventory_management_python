@@ -111,6 +111,7 @@ def mains(username):
                         con.commit()
                         messagebox.showinfo('Notification','Your Order Placed Successfully...',parent=placeorderWin)
                         savebill()
+                        
                     except:
                         pass
             #################################################Labels

@@ -113,7 +113,7 @@ def registerBtnfunc():
                     messagebox.showerror('Notification','Some Error occured while registering!!!\nPlease try again...',parent=registerroot)
             except:
                 messagebox.showerror('Notification','Something is wrong!!!\nPlease try again...',parent=registerroot)
-                return 
+                return
 
     #############################################################Labels
 
