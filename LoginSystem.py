@@ -33,11 +33,59 @@ def on_enterloginbtn(e):
     loginbtn.configure(bg='cyan')
 def on_leaveloginbtn(e):
     loginbtn.configure(bg='blue')
-    
+
+def on_enterforgotLabel(e):
+    forgotLabel.configure(fg='red')
+def on_leaveforgotLabel(e):
+    forgotLabel.configure(fg='black')   
+
 def on_enterregisterbtn(e):
     registerbtn.configure(bg='cyan')
 def on_leaveregisterbtn(e):
     registerbtn.configure(bg='blue')
+
+def forgotLabelfunc():
+    print("Forgot pass")
+    forgotroot = Toplevel()
+    forgotroot.geometry("600x250+450+250")
+    forgotroot.resizable(False,False)
+    forgotroot.configure(bg="powder blue")
+    forgotroot.title("Forgot Password")
+    forgotroot.grab_set()
+    askusernameval = StringVar()
+    def on_entersubmitbtn(e):
+        submitbtn.configure(bg='cyan')
+    def on_leavesubmitbtn(e):
+        submitbtn.configure(bg='blue')
+    def forgotsubmitBtnfunc():
+        print("Submit Email")
+        if askusernameval.get().strip() == '' :
+            messagebox.showerror('Error',"Username Field Cannot be Empty  !!!",parent=forgotroot)
+        else:
+            try:
+                conn = pymysql.connect(host='localhost', user='root', password='')
+                cursor = conn.cursor()
+                query = 'use inventorydb;'
+                cursor.execute(query)
+                query = 'select password from login_info where username=%s;'
+                cursor.execute(query,(askusernameval.get().strip()))
+                password = cursor.fetchone()
+                messagebox.showinfo('Info',f"Password is: {password[0]}",parent=forgotroot)
+            except:
+                print("Erorr has come")
+
+    askusernameLabel = Label(forgotroot,text = "Enter Username",font=('times',15,'italic bold'),bg='powder blue')
+    askusernameLabel.place(x=70,y=70)
+
+    askusernameEntry = Entry(forgotroot,textvariable=askusernameval,width=32,font=('arial',12,'italic'),bd=5,bg='light pink')
+    askusernameEntry.place(x=250,y=70)
+
+    submitbtn = Button(forgotroot,text='Submit',font=('times',15,'italic bold'),bg='blue',bd=5,activebackground = 'red',
+                   activeforeground='white',command = forgotsubmitBtnfunc)
+    submitbtn.place(x=300,y=150)
+    submitbtn.bind('<Enter>',on_entersubmitbtn)
+    submitbtn.bind('<Leave>',on_leavesubmitbtn)
+
 
 def loginBtnfunc():
     username = usernameval.get()
@@ -194,16 +242,21 @@ passwordEntry = Entry(root,show="*",textvariable=passwordval,width=32,font=('ari
 passwordEntry.place(x=230,y=130)
 
 ##############################################################BUtton
-loginbtn = Button(root,text='Login',font=('times',15,'italic bold'),bg='blue',bd=10,activebackground = 'red',
+loginbtn = Button(root,text='Login',font=('times',15,'italic bold'),bg='blue',bd=5,activebackground = 'red',
                    activeforeground='white',command = loginBtnfunc)
 loginbtn.place(x=270,y=190)
 loginbtn.bind('<Enter>',on_enterloginbtn)
 loginbtn.bind('<Leave>',on_leaveloginbtn)
 
-orLabel = Label(root,text = "OR...Not yet Registered!!! Register Below",font=('times',15,'italic bold'),bg='powder blue')
-orLabel.place(x=150,y=260)
+forgotLabel = Button(root,text = "Forgot Password?Click here",font=('times',10,'italic bold'),bd=None,bg='powder blue',activebackground = 'powder blue',command=forgotLabelfunc)
+forgotLabel.place(x=290,y=240)
+forgotLabel.bind('<Enter>',on_enterforgotLabel)
+forgotLabel.bind('<Leave>',on_leaveforgotLabel)
 
-registerbtn = Button(root,text='Register Now',font=('times',15,'italic bold'),bg='blue',bd=10,activebackground = 'red',
+orLabel = Label(root,text = "OR...Not yet Registered!!! Register Below",font=('times',10,'italic bold'),bg='powder blue')
+orLabel.place(x=180,y=290)
+
+registerbtn = Button(root,text='Register Now',font=('times',15,'italic bold'),bg='blue',bd=5,activebackground = 'red',
                    activeforeground='white',command = registerBtnfunc)
 registerbtn.place(x=240,y=310)
 registerbtn.bind('<Enter>',on_enterregisterbtn)
